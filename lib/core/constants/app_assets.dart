@@ -12,6 +12,7 @@ class Svg {
   final String likedHeart = "assets/svg/liked_heart.svg";
   final String download = "assets/svg/download.svg";
   final String search = "assets/svg/search.svg";
+  final String photoView = "assets/svg/open_the_picture.svg";
 }
 
 class Picture {

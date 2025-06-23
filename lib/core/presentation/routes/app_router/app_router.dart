@@ -10,6 +10,7 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         CupertinoRoute(page: HomeRoute.page, initial: true),
         CupertinoRoute(page: PhotoRoute.page),
+        CupertinoRoute(page: FullPhotoRoute.page),
         CupertinoRoute(page: FavoritiesRoute.page),
       ];
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_finder_app/core/constants/app_assets.dart';
 import 'package:image_finder_app/core/domain/entities/photo/photo_entity.dart';
+import 'package:image_finder_app/core/presentation/routes/app_router/app_router.gr.dart';
 import 'package:image_finder_app/core/presentation/widgets/main_app_bar/main_app_bar.dart';
 import 'package:image_finder_app/core/presentation/widgets/shimmer/image_shimmer_widget.dart';
 import 'package:image_finder_app/core/presentation/widgets/shimmer/profile_shimmer_widget.dart';
@@ -159,8 +160,28 @@ class PhotoScreen extends StatelessWidget implements AutoRouteWrapper {
                       ],
                     ),
                     const SizedBox(height: 32.0),
-                    ImageShimmerWidget(
-                      url: entity.pathUrl,
+                    Stack(
+                      children: [
+                        Hero(
+                          tag: 'photo-${entity.id}',
+                          child: ImageShimmerWidget(
+                            url: entity.pathUrl,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10.0,
+                          right: 10.0,
+                          child: IconButton(
+                            onPressed: () => context.router.push(
+                              FullPhotoRoute(
+                                tag: 'photo-${entity.id}',
+                                url: entity.pathUrl,
+                              ),
+                            ),
+                            icon: SvgPicture.asset(AppAssets.svg.photoView),
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
