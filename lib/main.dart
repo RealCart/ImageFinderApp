@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:image_finder_app/core/config/app_theme.dart';
+import 'package:image_finder_app/core/presentation/routes/app_router/app_router.dart';
+import 'package:image_finder_app/service_locator.dart';
+import 'package:toastification/toastification.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  serviceLoactor();
+  await sl.allReady();
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -9,12 +18,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    final AppRouter router = AppRouter();
+
+    return ToastificationWrapper(
+      config: ToastificationConfig(
+        maxToastLimit: 1,
       ),
-      home: SizedBox.shrink(),
+      child: MaterialApp.router(
+        title: 'Image Fined App',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.theme,
+        routerConfig: router.config(),
+      ),
     );
   }
 }
