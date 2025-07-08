@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppRouter router = AppRouter();
 
+
     return ToastificationWrapper(
       config: ToastificationConfig(
         maxToastLimit: 1,

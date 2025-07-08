@@ -27,46 +27,48 @@ class FavoritiesScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomRefreshIndicator(
-        onRefresh: () async {
-          Completer<void> completer = Completer();
-          context.read<FavoritiesBloc>().add(GetFavoritiesEvent(completer: completer));
-          return completer.future;
-        },
-        child: CustomScrollView(
-          slivers: [
-            MainAppBar(),
-            SliverToBoxAdapter(
-              child: const SizedBox(height: 40.0),
-            ),
-            BlocBuilder<FavoritiesBloc, FavoritiesState>(
-              builder: (context, state) {
-                if (state.status == StatusEnum.loading) {
-                  return const SliverPadding(
-                    padding: EdgeInsets.fromLTRB(19, 45, 19, 10),
-                    sliver: SkeletonSliverList(itemCount: 6),
+      body: SafeArea(
+        child: CustomRefreshIndicator(
+          onRefresh: () async {
+            Completer<void> completer = Completer();
+            context.read<FavoritiesBloc>().add(GetFavoritiesEvent(completer: completer));
+            return completer.future;
+          },
+          child: CustomScrollView(
+            slivers: [
+              MainAppBar(),
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 40.0),
+              ),
+              BlocBuilder<FavoritiesBloc, FavoritiesState>(
+                builder: (context, state) {
+                  if (state.status == StatusEnum.loading) {
+                    return const SliverPadding(
+                      padding: EdgeInsets.fromLTRB(19, 45, 19, 10),
+                      sliver: SkeletonSliverList(itemCount: 6),
+                    );
+                  }
+                  return SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(19, 45, 19, 10),
+                    sliver: SliverList.separated(
+                      itemCount: state.favorities.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final item = state.favorities[index];
+        
+                        return PhotoWidget(
+                          url: item.pathUrl,
+                          onPressed: () => context.router.push(
+                            PhotoRoute(entity: item),
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }
-                return SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(19, 45, 19, 10),
-                  sliver: SliverList.separated(
-                    itemCount: state.favorities.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final item = state.favorities[index];
-
-                      return PhotoWidget(
-                        url: item.pathUrl,
-                        onPressed: () => context.router.push(
-                          PhotoRoute(entity: item),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

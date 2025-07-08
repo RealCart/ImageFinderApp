@@ -34,160 +34,162 @@ class PhotoScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<PhotoBloc, PhotoState>(
-        listener: (context, state) {
-          if (state.downloadStatus == StatusEnum.successfulll) {
-            context.showSuccessToast('Downloaded successfully');
-          } else if (state.downloadStatus == StatusEnum.error) {
-            context.showErrorToast('Download failed');
-          }
-        },
-        child: CustomScrollView(
-          slivers: [
-            MainAppBar(),
-            SliverToBoxAdapter(
-              child: const SizedBox(height: 40.0),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsetsGeometry.symmetric(horizontal: 20.0),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ProfileShimmerWidget(
-                          url: entity.profileImage,
-                        ),
-                        const SizedBox(width: 11.0),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                entity.authorName,
-                                style: const TextStyle(
-                                    fontSize: 18, color: Colors.black),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              ),
-                              Text(
-                                '@${entity.authorUsername}',
-                                style: const TextStyle(
-                                    fontSize: 18, color: Colors.grey),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        BlocBuilder<PhotoBloc, PhotoState>(
-                          builder: (context, state) {
-                            return InkWell(
-                              onTap: () {
-                                context.read<PhotoBloc>().add(
-                                      ToggleFavoriteEvent(photo: entity),
-                                    );
-                              },
-                              highlightColor: Colors.black.withAlpha(50),
-                              borderRadius: BorderRadius.circular(16.0),
-                              radius: 16.0,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0,
-                                  vertical: 11.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withAlpha(50),
-                                      blurRadius: 10.0,
-                                    ),
-                                  ],
-                                ),
-                                child: SvgPicture.asset(
-                                  state.isLiked
-                                      ? AppAssets.svg.likedHeart
-                                      : AppAssets.svg.blackHeart,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        BlocBuilder<PhotoBloc, PhotoState>(
-                          builder: (context, state) {
-                            return IconButton(
-                              onPressed: () => context.read<PhotoBloc>().add(
-                                    DownloadPhotoEvent(photo: entity),
-                                  ),
-                              icon: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0,
-                                  vertical: 11.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: const Color(0xffFFF200),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withAlpha(100),
-                                    ),
-                                  ],
-                                ),
-                                child: state.isDownloading
-                                    ? SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            Colors.black,
-                                          ),
-                                        ),
-                                      )
-                                    : SvgPicture.asset(AppAssets.svg.download),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32.0),
-                    Stack(
-                      children: [
-                        Hero(
-                          tag: 'photo-${entity.id}',
-                          child: ImageShimmerWidget(
-                            url: entity.pathUrl,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 10.0,
-                          right: 10.0,
-                          child: IconButton(
-                            onPressed: () => context.router.push(
-                              FullPhotoRoute(
-                                tag: 'photo-${entity.id}',
-                                url: entity.pathUrl,
-                              ),
-                            ),
-                            icon: SvgPicture.asset(AppAssets.svg.photoView),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+      body: SafeArea(
+        child: BlocListener<PhotoBloc, PhotoState>(
+          listener: (context, state) {
+            if (state.downloadStatus == StatusEnum.successfulll) {
+              context.showSuccessToast('Downloaded successfully');
+            } else if (state.downloadStatus == StatusEnum.error) {
+              context.showErrorToast('Download failed');
+            }
+          },
+          child: CustomScrollView(
+            slivers: [
+              MainAppBar(),
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 40.0),
               ),
-            )
-          ],
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsetsGeometry.symmetric(horizontal: 20.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ProfileShimmerWidget(
+                            url: entity.profileImage,
+                          ),
+                          const SizedBox(width: 11.0),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  entity.authorName,
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                                Text(
+                                  '@${entity.authorUsername}',
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.grey),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          BlocBuilder<PhotoBloc, PhotoState>(
+                            builder: (context, state) {
+                              return InkWell(
+                                onTap: () {
+                                  context.read<PhotoBloc>().add(
+                                        ToggleFavoriteEvent(photo: entity),
+                                      );
+                                },
+                                highlightColor: Colors.black.withAlpha(50),
+                                borderRadius: BorderRadius.circular(16.0),
+                                radius: 16.0,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                    vertical: 11.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withAlpha(50),
+                                        blurRadius: 10.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: SvgPicture.asset(
+                                    state.isLiked
+                                        ? AppAssets.svg.likedHeart
+                                        : AppAssets.svg.blackHeart,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          BlocBuilder<PhotoBloc, PhotoState>(
+                            builder: (context, state) {
+                              return IconButton(
+                                onPressed: () => context.read<PhotoBloc>().add(
+                                      DownloadPhotoEvent(photo: entity),
+                                    ),
+                                icon: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                    vertical: 11.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    color: const Color(0xffFFF200),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withAlpha(100),
+                                      ),
+                                    ],
+                                  ),
+                                  child: state.isDownloading
+                                      ? SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              Colors.black,
+                                            ),
+                                          ),
+                                        )
+                                      : SvgPicture.asset(AppAssets.svg.download),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32.0),
+                      Stack(
+                        children: [
+                          Hero(
+                            tag: 'photo-${entity.id}',
+                            child: ImageShimmerWidget(
+                              url: entity.pathUrl,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10.0,
+                            right: 10.0,
+                            child: IconButton(
+                              onPressed: () => context.router.push(
+                                FullPhotoRoute(
+                                  tag: 'photo-${entity.id}',
+                                  url: entity.pathUrl,
+                                ),
+                              ),
+                              icon: SvgPicture.asset(AppAssets.svg.photoView),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

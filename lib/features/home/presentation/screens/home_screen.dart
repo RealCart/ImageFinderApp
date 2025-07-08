@@ -55,80 +55,81 @@ class _HomeScreenState extends State<HomeScreen> {
       log("EVENT SED", name: "BLOC EVENTT");
       bloc.add(GetMorePhotoEvent());
     }
-    ;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomRefreshIndicator(
-        onRefresh: () {
-          final completer = Completer<void>();
-          context
-              .read<HomeBloc>()
-              .add(PullToRefreshEvent(completer: completer));
-          return completer.future;
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            const MainAppBar(),
-            SearchAppBar(
-              onChanged: (value) =>
-                  context.read<HomeBloc>().add(SearchPhotoEvent(value: value)),
-            ),
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                final isFirstLoading = state.status == StatusEnum.loading &&
-                    (state.photo?.isEmpty ?? true);
-
-                if (state.status == StatusEnum.error && state.error != null) {
+      body: SafeArea(
+        child: CustomRefreshIndicator(
+          onRefresh: () {
+            final completer = Completer<void>();
+            context
+                .read<HomeBloc>()
+                .add(PullToRefreshEvent(completer: completer));
+            return completer.future;
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              const MainAppBar(),
+              SearchAppBar(
+                onChanged: (value) =>
+                    context.read<HomeBloc>().add(SearchPhotoEvent(value: value)),
+              ),
+              BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  final isFirstLoading = state.status == StatusEnum.loading &&
+                      (state.photo?.isEmpty ?? true);
+        
+                  if (state.status == StatusEnum.error && state.error != null) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(top: 30),
+                      sliver: SliverToBoxAdapter(
+                        child: CustomErrorPart(errorType: state.error!),
+                      ),
+                    );
+                  }
+        
+                  if (isFirstLoading) {
+                    return const SliverPadding(
+                      padding: EdgeInsets.fromLTRB(19, 45, 19, 10),
+                      sliver: SkeletonSliverList(itemCount: 6),
+                    );
+                  }
+        
                   return SliverPadding(
-                    padding: const EdgeInsets.only(top: 30),
-                    sliver: SliverToBoxAdapter(
-                      child: CustomErrorPart(errorType: state.error!),
+                    padding: const EdgeInsets.fromLTRB(19, 45, 19, 10),
+                    sliver: SliverList.separated(
+                      itemCount: state.photo!.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final item = state.photo![index];
+                        return PhotoWidget(
+                          url: item.pathUrl,
+                          onPressed: () => context.router.push(
+                            PhotoRoute(entity: item),
+                          ),
+                        );
+                      },
                     ),
                   );
-                }
-
-                if (isFirstLoading) {
+                },
+              ),
+              BlocBuilder<HomeBloc, HomeState>(
+                buildWhen: (p, c) => p.loadingMore != c.loadingMore,
+                builder: (context, state) {
+                  if (state.loadingMore != StatusEnum.loading) {
+                    return const SliverToBoxAdapter(child: SizedBox());
+                  }
                   return const SliverPadding(
-                    padding: EdgeInsets.fromLTRB(19, 45, 19, 10),
-                    sliver: SkeletonSliverList(itemCount: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 19),
+                    sliver: SkeletonSliverList(itemCount: 3),
                   );
-                }
-
-                return SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(19, 45, 19, 10),
-                  sliver: SliverList.separated(
-                    itemCount: state.photo!.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final item = state.photo![index];
-                      return PhotoWidget(
-                        url: item.pathUrl,
-                        onPressed: () => context.router.push(
-                          PhotoRoute(entity: item),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            BlocBuilder<HomeBloc, HomeState>(
-              buildWhen: (p, c) => p.loadingMore != c.loadingMore,
-              builder: (context, state) {
-                if (state.loadingMore != StatusEnum.loading) {
-                  return const SliverToBoxAdapter(child: SizedBox());
-                }
-                return const SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 19),
-                  sliver: SkeletonSliverList(itemCount: 3),
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

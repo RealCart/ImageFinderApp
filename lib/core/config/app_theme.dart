@@ -8,6 +8,8 @@ class AppTheme {
       backgroundColor: const Color(0xFFFFFFFF),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+        statusBarColor: const Color(0xff000000),
       ),
     ),
     textSelectionTheme: TextSelectionThemeData(
