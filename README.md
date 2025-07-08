@@ -1,5 +1,17 @@
 # image_finder_app
 
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 09 11 30](https://github.com/user-attachments/assets/f3f2c09f-acf4-4e9c-bd62-483ed06ca1e3)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 53 26](https://github.com/user-attachments/assets/97b18f8c-fd56-45e1-8fbc-17fbbf1dd6a4)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 53 33](https://github.com/user-attachments/assets/399a7f0f-7f69-44bc-b503-c85307b80fac)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 53 47](https://github.com/user-attachments/assets/974176b0-a657-4b46-b050-cb662cb92c2c)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 53 50](https://github.com/user-attachments/assets/9968e914-52fd-4d9e-b419-bb7898a0ab64)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 54 02](https://github.com/user-attachments/assets/a70c595c-c557-490c-a9a8-2191f3b1f79a)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 54 05](https://github.com/user-attachments/assets/a4537439-dda7-486a-9c6b-a3cc3b1fa54c)
+![Simulator Screenshot - iPhone 16 Plus - 2025-07-08 at 08 54 13](https://github.com/user-attachments/assets/8e86e480-6caa-49cc-9afe-36ab817379ed)
+
+
+
+
 # 🖼️ Image Finder App
 
 🔍 Discover • ❤️ Favorite • 💾 Download • 📱 Offline
